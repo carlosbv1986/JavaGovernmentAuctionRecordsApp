@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<!--
+This file is a template used for the page content of the JEditorPane control 
+found in Help Contents tab in the swing application.
+-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Application Guide - Example</title>
+
+        <!-- Minimal CSS compatible with Swing's JEditorPane (basic CSS/HTML 3.2 features) -->
+        <style>
+            /* Keep styles very simple */
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 12pt;        /* use pt or px */
+                color: #000000;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 14pt;
+                font-weight: bold;
+                margin: 8px 0 6px 0;
+            }
+
+            h2 {
+                font-size: 12pt;
+                font-weight: bold;
+                margin: 10px 0 6px 0;
+            }
+
+            p {
+                margin: 6px 0;
+                line-height: 1.2;
+            }
+
+            .label {
+                font-weight: bold;      /* use as inline label */
+            }
+
+            .section {
+                margin: 8px 0 12px 0;
+                padding: 6px;
+            }
+
+            .bullet-list {
+                margin-left: 18px;      /* indent bullets */
+            }
+
+            .note {
+                font-style: italic;
+                margin-top: 6px;
+            }
+
+            .code {
+                font-family: "Courier New", Courier, monospace;
+                font-size: 11pt;
+                background-color: #f2f2f2;
+                padding: 4px;
+                border: 1px solid #ddd;
+                display: inline-block;
+            }
+
+            /* Small table for key/value label pairs (simple) */
+            .kvtable {
+                border-collapse: collapse;
+                margin-top: 6px;
+            }
+            .kvtable td {
+                padding: 4px 8px;
+                vertical-align: top;
+            }
+            .kvtable .k {
+                font-weight: bold;
+                width: 120px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h1>Application User Guide</h1>
+
+        <div class="section">
+            <h2>Overview</h2>
+            <p>
+                This short guide explains the main features of the application and how to perform common tasks.
+                The text below uses placeholder (dummy) content to show structure and formatting.
+            </p>
+
+            <p class="note">Note: replace all sample text with your real instructions.</p>
+        </div>
+
+        <div class="section">
+            <h2>Getting Started</h2>
+
+            <p><span class="label">Step 1:</span> Install the application by running the installer and following the prompts.</p>
+            <p><span class="label">Step 2:</span> Launch the application from the Start menu or desktop shortcut.</p>
+
+            <p class="label">Quick checklist:</p>
+            <ul class="bullet-list">
+                <li>Confirm system requirements are met.</li>
+                <li>Create or sign in with your account.</li>
+                <li>Configure initial settings in <span class="code">Settings → Preferences</span>.</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Main Window Layout</h2>
+
+            <p>
+                The main window contains the following areas:
+            </p>
+
+            <ul class="bullet-list">
+                <li><span class="label">Toolbar:</span> Quick actions and shortcuts.</li>
+                <li><span class="label">Navigation Pane:</span> Switch between modules.</li>
+                <li><span class="label">Content Area:</span> Primary workspace where data and forms appear.</li>
+                <li><span class="label">Status Bar:</span> Displays hints and connection status.</li>
+            </ul>
+
+            <table class="kvtable">
+                <tr><td class="k">Toolbar</td><td>Contains buttons for common tasks (Open, Save, Print).</td></tr>
+                <tr><td class="k">Navigation</td><td>Use this pane to select modules (Dashboard, Reports, Settings).</td></tr>
+                <tr><td class="k">Content</td><td>Context-sensitive; most user actions happen here.</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Working with Documents</h2>
+
+            <p>
+                To create a new document, choose <span class="code">File → New</span>. To save, use <span class="code">File → Save</span>.
+            </p>
+
+            <p class="label">Formatting options</p>
+            <ul class="bullet-list">
+                <li><span class="label">Bold text:</span> Use the <b>B</b> button in the editor toolbar.</li>
+                <li><span class="label">Bullet lists:</span> Select text and click the bullet list button to create an unordered list.</li>
+                <li><span class="label">Code blocks:</span> Use the monospace style for code snippets.</li>
+            </ul>
+
+            <p>
+                Example of a bullet list inserted in a document:
+            </p>
+
+            <ul class="bullet-list">
+                <li>First example item</li>
+                <li>Second example item with <b>bold</b> text</li>
+                <li>Third item</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Troubleshooting</h2>
+
+            <p>
+                If you encounter problems, try the following steps:
+            </p>
+
+            <ul class="bullet-list">
+                <li>Restart the application.</li>
+                <li>Check the connection settings under <span class="code">Settings → Network</span>.</li>
+                <li>Review the log file at <span class="code">C:\ProgramData\ExampleApp\logs\app.log</span>.</li>
+            </ul>
+
+            <p class="note">If issues persist, contact support with the log file attached.</p>
+        </div>
+
+        <div class="section">
+            <h2>Contact & Version</h2>
+
+            <p>
+                <span class="label">Support email:</span> support@example.com<br>
+                <span class="label">App version:</span> 1.0.0 (sample)
+            </p>
+        </div>
+
+    </body>
+</html>
