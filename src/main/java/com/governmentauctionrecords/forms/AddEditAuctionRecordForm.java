@@ -48,6 +48,8 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
         jLabel8 = new javax.swing.JLabel();
         jTextFieldAuctionWinningBiderName = new javax.swing.JTextField();
         jFormattedTextFieldCreatedAt = new javax.swing.JFormattedTextField();
+        jLabel9 = new javax.swing.JLabel();
+        jTextFieldAuctionId = new javax.swing.JTextField();
 
         jLabel3.setText("Title:");
 
@@ -69,6 +71,10 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
 
         jFormattedTextFieldCreatedAt.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US))));
 
+        jLabel9.setText("ID:");
+
+        jTextFieldAuctionId.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -81,9 +87,11 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldAuctionId)
                     .addComponent(jTextFieldAuctionWinningBiderName)
                     .addComponent(jTextFieldAuctionWinningBidAmount)
                     .addComponent(jTextFieldAuctionTitle)
@@ -94,8 +102,12 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTextFieldAuctionId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextFieldAuctionTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -126,6 +138,7 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
     public Auction getAuctionData() throws Exception {
         Auction auction = new Auction();
 
+        auction.setId(Integer.parseInt(jTextFieldAuctionId.getText().trim()));
         auction.setTitle(jTextFieldAuctionTitle.getText().trim());
         auction.setDescription(jTextAreaAuctionDescription.getText().trim());
 
@@ -162,6 +175,7 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
             return;
         }
 
+        jTextFieldAuctionId.setText(Integer.toString(auction.getId()));
         jTextFieldAuctionTitle.setText(auction.getTitle());
         jTextAreaAuctionDescription.setText(auction.getDescription());
         jTextAreaAuctionDescription.setCaretPosition(0); // go back to the start
@@ -199,8 +213,10 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaAuctionDescription;
+    private javax.swing.JTextField jTextFieldAuctionId;
     private javax.swing.JTextField jTextFieldAuctionTitle;
     private javax.swing.JTextField jTextFieldAuctionWinningBidAmount;
     private javax.swing.JTextField jTextFieldAuctionWinningBiderName;

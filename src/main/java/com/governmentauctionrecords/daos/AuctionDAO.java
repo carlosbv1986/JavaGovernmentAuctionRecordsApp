@@ -82,4 +82,32 @@ public class AuctionDAO {
         return null;
     }
 
+    public static Auction searchAuction(String searchCriteria) throws SQLException {
+        if (searchCriteria == null || searchCriteria.trim().isBlank()) {
+            return null; // no search term provided
+        }
+
+        String sql = "SELECT TOP 1 * FROM Auction "
+                + "WHERE Title IS NOT NULL AND LTRIM(RTRIM(Title)) <> '' "
+                + "AND (CAST(Id AS VARCHAR) LIKE ? "
+                + "OR Title LIKE ?) "
+                + "ORDER BY CreatedAt DESC";
+
+        try (Connection conn = SqlServerDatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String pattern = "%" + searchCriteria.trim() + "%";
+            stmt.setString(1, pattern); // search Id
+            stmt.setString(2, pattern); // search Title
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        }
+
+        return null; // no match found
+    }
+
 }

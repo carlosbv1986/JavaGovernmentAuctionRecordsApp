@@ -76,11 +76,12 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jMenuItemSelectAll = new javax.swing.JMenuItem();
         jMenuItemPrint = new javax.swing.JMenuItem();
         jPanelBidRecordListHeader = new javax.swing.JPanel();
+        jLabelBidRecordsListHeaderAuctionId = new javax.swing.JLabel();
         jLabelBidRecordsListHeaderBidderName = new javax.swing.JLabel();
         jLabelBidRecordsListHeaderBidAmount = new javax.swing.JLabel();
         jLabelBidRecordsListHeaderBidTime = new javax.swing.JLabel();
         buttonGroupLookAndFeelOptions = new javax.swing.ButtonGroup();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jTabbedPaneFormPages = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jTextFieldAuctionTitle = new javax.swing.JTextField();
@@ -95,6 +96,8 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jFormattedTextFieldAuctionDate = new javax.swing.JFormattedTextField();
         jFormattedTextFieldCreatedAt = new javax.swing.JFormattedTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jTextFieldAuctionId = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPaneBidRecords = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -112,10 +115,11 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jButtonNextRecord = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
+        jPanelRecordPrintOptions = new javax.swing.JPanel();
         jCheckBoxIncludebidRecords = new javax.swing.JCheckBox();
         jButtonPrintRecord = new javax.swing.JButton();
         jButtonExit = new javax.swing.JButton();
+        jButtonSearchRecord = new javax.swing.JButton();
 
         jMenuItemCopy.setText("Copy");
         jMenuItemCopy.addActionListener(new java.awt.event.ActionListener() {
@@ -143,6 +147,11 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         jPanelBidRecordListHeader.setLayout(new java.awt.GridLayout(1, 3));
 
+        jLabelBidRecordsListHeaderAuctionId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelBidRecordsListHeaderAuctionId.setText("Auction ID");
+        jLabelBidRecordsListHeaderAuctionId.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanelBidRecordListHeader.add(jLabelBidRecordsListHeaderAuctionId);
+
         jLabelBidRecordsListHeaderBidderName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelBidRecordsListHeaderBidderName.setText("Bidder Name");
         jLabelBidRecordsListHeaderBidderName.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -163,6 +172,12 @@ public class MainApplicationForm extends javax.swing.JFrame {
         setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         setIconImage(new ImageIcon("C:\\Users\\carlo\\OneDrive\\Documents\\NetBeansProjects\\GovernmentAuctionRecordsApp\\src\\main\\resources\\images\\vb6.png").getImage());
         setResizable(false);
+
+        jTabbedPaneFormPages.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPaneFormPagesStateChanged(evt);
+            }
+        });
 
         jLabel3.setText("Title:");
 
@@ -193,6 +208,10 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jFormattedTextFieldCreatedAt.setEditable(false);
         jFormattedTextFieldCreatedAt.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US))));
 
+        jLabel10.setText("ID:");
+
+        jTextFieldAuctionId.setEditable(false);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -205,9 +224,11 @@ public class MainApplicationForm extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel8))
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldAuctionId)
                     .addComponent(jTextFieldAuctionWinningBiderName)
                     .addComponent(jTextFieldAuctionWinningBidAmount)
                     .addComponent(jTextFieldAuctionTitle)
@@ -218,8 +239,12 @@ public class MainApplicationForm extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jTextFieldAuctionId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextFieldAuctionTitle, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -243,10 +268,10 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldAuctionWinningBiderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Auction Records", jPanel2);
+        jTabbedPaneFormPages.addTab("Auction Records", jPanel2);
 
         jScrollPaneBidRecords.setColumnHeaderView(jPanelBidRecordListHeader);
 
@@ -266,11 +291,11 @@ public class MainApplicationForm extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPaneBidRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 322, Short.MAX_VALUE)
+                .addComponent(jScrollPaneBidRecords, javax.swing.GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Bid Records", jPanel3);
+        jTabbedPaneFormPages.addTab("Bid Records", jPanel3);
 
         jEditorPaneHelpContents.setEditable(false);
         jEditorPaneHelpContents.setContentType("text/html"); // NOI18N
@@ -297,10 +322,10 @@ public class MainApplicationForm extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Help Contents", jPanel4);
+        jTabbedPaneFormPages.addTab("Help Contents", jPanel4);
 
         jLabel9.setText("Change the Look And Feel (LAF) of this application's interface.");
 
@@ -345,10 +370,10 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 .addComponent(jRadioButtonMetalLaf)
                 .addGap(18, 18, 18)
                 .addComponent(jRadioButtonWindowsClassicLaf)
-                .addContainerGap(237, Short.MAX_VALUE))
+                .addContainerGap(287, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Application Settings", jPanel5);
+        jTabbedPaneFormPages.addTab("Application Settings", jPanel5);
 
         jButtonEditRecord.setText("Edit Record");
         jButtonEditRecord.addActionListener(new java.awt.event.ActionListener() {
@@ -389,7 +414,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\carlo\\OneDrive\\Documents\\NetBeansProjects\\GovernmentAuctionRecordsApp\\src\\main\\resources\\images\\arrow-right-icon.png")); // NOI18N
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Record Print Options"));
+        jPanelRecordPrintOptions.setBorder(javax.swing.BorderFactory.createTitledBorder("Record Print Options"));
 
         jCheckBoxIncludebidRecords.setText("Include Bid Records");
 
@@ -400,20 +425,20 @@ public class MainApplicationForm extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanelRecordPrintOptionsLayout = new javax.swing.GroupLayout(jPanelRecordPrintOptions);
+        jPanelRecordPrintOptions.setLayout(jPanelRecordPrintOptionsLayout);
+        jPanelRecordPrintOptionsLayout.setHorizontalGroup(
+            jPanelRecordPrintOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelRecordPrintOptionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanelRecordPrintOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonPrintRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jCheckBoxIncludebidRecords))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanelRecordPrintOptionsLayout.setVerticalGroup(
+            jPanelRecordPrintOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelRecordPrintOptionsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jCheckBoxIncludebidRecords)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -426,6 +451,13 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jButtonExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonExitActionPerformed(evt);
+            }
+        });
+
+        jButtonSearchRecord.setText("Search Record");
+        jButtonSearchRecord.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSearchRecordActionPerformed(evt);
             }
         });
 
@@ -445,15 +477,16 @@ public class MainApplicationForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTabbedPane1))
+                    .addComponent(jTabbedPaneFormPages))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButtonEditRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButtonDeleteRecord, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
                         .addComponent(jButtonAddRecord, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
-                        .addComponent(jButtonExit, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonExit, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)
+                        .addComponent(jButtonSearchRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanelRecordPrintOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -462,9 +495,11 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jTabbedPane1))
+                        .addComponent(jTabbedPaneFormPages, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
+                        .addComponent(jButtonSearchRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonEditRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonDeleteRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -473,7 +508,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonExit, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jPanelRecordPrintOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -634,6 +669,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
         String commandButtons[] = {"Submit", "Cancel"};
         AddEditAuctionRecordForm form = new AddEditAuctionRecordForm();
         Auction toEdit = new Auction();
+        toEdit.setId(Integer.parseInt(jTextFieldAuctionId.getText()));
         toEdit.setTitle(jTextFieldAuctionTitle.getText());
         toEdit.setDescription(jTextAreaAuctionDescription.getText());
 
@@ -780,7 +816,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
 //                // handle error
 //            }
 //        }
-
         // Use Swing, where it uses its own built-in printing implementation 
         // specifically tailored for text components. This method handles 
         // pagination, font styles, and the print dialog with features optimized 
@@ -808,6 +843,43 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jButtonPrintRecordActionPerformed
+
+    private void jTabbedPaneFormPagesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneFormPagesStateChanged
+        int selectedIndex = jTabbedPaneFormPages.getSelectedIndex();
+        boolean isFirstTabSelected = selectedIndex == 0
+                && "Auction Records".equals(jTabbedPaneFormPages.getTitleAt(selectedIndex));
+        jButtonSearchRecord.setVisible(isFirstTabSelected);
+        jButtonAddRecord.setVisible(isFirstTabSelected);
+        jButtonEditRecord.setVisible(isFirstTabSelected);
+        jButtonDeleteRecord.setVisible(isFirstTabSelected);
+        jPanelRecordPrintOptions.setVisible(isFirstTabSelected);
+    }//GEN-LAST:event_jTabbedPaneFormPagesStateChanged
+
+    private void jButtonSearchRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchRecordActionPerformed
+        String searchInput = JOptionPane.showInputDialog(this,
+                "Enter record ID or Title as search criteria:",
+                "Record Search",
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (searchInput != null && !searchInput.trim().isBlank()) {
+            try {
+                Auction foundRecord = AuctionDAO.searchAuction(searchInput);
+                if (foundRecord != null) {
+                    populateForm(foundRecord);
+                    updateNavigationButtons(foundRecord.getCreatedAt());
+                } else {
+                    Toolkit.getDefaultToolkit().beep();
+                    JOptionPane.showMessageDialog(this,
+                            "No record found for the searched criteria.", 
+                            "Search Results", 
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButtonSearchRecordActionPerformed
 
     private void loadRecord(Timestamp timestamp, Object sourceComponent) {
         try {
@@ -849,6 +921,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
     }
 
     private void populateForm(Auction record) {
+        jTextFieldAuctionId.setText(Integer.toString(record.getId()));
         jTextFieldAuctionTitle.setText(record.getTitle());
         jTextAreaAuctionDescription.setText(record.getDescription());
         jTextAreaAuctionDescription.setCaretPosition(0); // go back to the start
@@ -928,11 +1001,13 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JButton jButtonNextRecord;
     private javax.swing.JButton jButtonPreviousRecord;
     private javax.swing.JButton jButtonPrintRecord;
+    private javax.swing.JButton jButtonSearchRecord;
     private javax.swing.JCheckBox jCheckBoxIncludebidRecords;
     private javax.swing.JEditorPane jEditorPaneHelpContents;
     private javax.swing.JFormattedTextField jFormattedTextFieldAuctionDate;
     private javax.swing.JFormattedTextField jFormattedTextFieldCreatedAt;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -941,6 +1016,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelBidRecordsListHeaderAuctionId;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidAmount;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidTime;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidderName;
@@ -948,20 +1024,21 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JMenuItem jMenuItemSelectAll;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanelBidRecordListHeader;
+    private javax.swing.JPanel jPanelRecordPrintOptions;
     private javax.swing.JPopupMenu jPopupMenuForEditorPane;
     private javax.swing.JRadioButton jRadioButtonMetalLaf;
     private javax.swing.JRadioButton jRadioButtonWindowsClassicLaf;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneBidRecords;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPaneFormPages;
     private javax.swing.JTextArea jTextAreaAuctionDescription;
+    private javax.swing.JTextField jTextFieldAuctionId;
     private javax.swing.JTextField jTextFieldAuctionTitle;
     private javax.swing.JTextField jTextFieldAuctionWinningBidAmount;
     private javax.swing.JTextField jTextFieldAuctionWinningBiderName;

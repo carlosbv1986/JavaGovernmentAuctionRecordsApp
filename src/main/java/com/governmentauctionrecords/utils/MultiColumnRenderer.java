@@ -20,12 +20,14 @@ public class MultiColumnRenderer extends JPanel implements ListCellRenderer<Stri
     private JLabel col1 = new JLabel("Label 1");
     private JLabel col2 = new JLabel("Label 2");
     private JLabel col3 = new JLabel("Label 3");
+    private JLabel col4 = new JLabel("Label 4");
 
     public MultiColumnRenderer() {
         setLayout(new FlowLayout(FlowLayout.LEFT, 50, 0));
         add(col1);
         add(col2);
         add(col3);
+        add(col4);
     }
 
     @Override
@@ -35,6 +37,7 @@ public class MultiColumnRenderer extends JPanel implements ListCellRenderer<Stri
         col1.setText(parts.length > 0 ? parts[0] : "");
         col2.setText(parts.length > 1 ? parts[1] : "");
         col3.setText(parts.length > 2 ? parts[2] : "");
+        col3.setText(parts.length > 3 ? parts[3] : "");
 
         if (isSelected) {
             setBackground(list.getSelectionBackground());
@@ -42,12 +45,14 @@ public class MultiColumnRenderer extends JPanel implements ListCellRenderer<Stri
             col1.setForeground(list.getSelectionForeground());
             col2.setForeground(list.getSelectionForeground());
             col3.setForeground(list.getSelectionForeground());
+            col4.setForeground(list.getSelectionForeground());
         } else {
             setBackground(list.getBackground());
             setForeground(list.getForeground());
             col1.setForeground(list.getForeground());
             col2.setForeground(list.getForeground());
             col3.setForeground(list.getForeground());
+            col4.setForeground(list.getForeground());
         }
         
         setOpaque(true);
