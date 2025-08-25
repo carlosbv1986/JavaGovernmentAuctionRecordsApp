@@ -23,13 +23,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.governmentauctionrecords.daos.AuctionDAO;
 import com.governmentauctionrecords.models.Auction;
-import com.governmentauctionrecords.utils.AuctionRecordPrinter;
-import java.awt.print.PrinterJob;
+import com.governmentauctionrecords.utils.MultiColumnJListRenderer;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.Date;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
@@ -60,6 +61,35 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         // Load initial (latest) record on startup
         loadRecord(null, null);
+
+        String[][] rowData = {
+            {"Alice", "25", "NY", "Active"},
+            {"Bob", "30", "CA", "Inactive"},
+            {"Charlie", "22", "TX", "Pending"},};
+
+        // Cast the NetBeans-generated JList to a raw type.
+        // Why? Because the field was declared as JList<String> and we need to store String[] rows.
+        // Raw type allows us to bypass the generic type restriction safely.
+        JList rawList = jListBidRecords;
+
+        // Create a DefaultListModel to hold our row data.
+        // DefaultListModel is mutable, and each element will be a String[] (one row).
+        DefaultListModel<String[]> model = new DefaultListModel<>();
+
+        // Populate the model with the sample row data.
+        for (String[] row : rowData) {
+            // Add each row (String array) as a single element in the list model.
+            model.addElement(row);
+        }
+
+        // Assign the model to the JList.
+        // This replaces the previous model (was likely a default model of Strings).
+        rawList.setModel(model);
+
+        // Set a custom cell renderer to display each String[] as multiple columns.
+        // MultiColumnJListRenderer is a JPanel-based renderer that aligns labels with headers.
+        // It also handles selection highlighting, mimicking the default JList appearance.
+        rawList.setCellRenderer(new MultiColumnJListRenderer());
     }
 
     /**
@@ -100,7 +130,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jTextFieldAuctionId = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jScrollPaneBidRecords = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListBidRecords = new javax.swing.JList<>();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jEditorPaneHelpContents = new javax.swing.JEditorPane();
@@ -171,7 +201,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
         setTitle("Goverment Auction Records");
         setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
         setIconImage(new ImageIcon("C:\\Users\\carlo\\OneDrive\\Documents\\NetBeansProjects\\GovernmentAuctionRecordsApp\\src\\main\\resources\\images\\vb6.png").getImage());
-        setResizable(false);
 
         jTabbedPaneFormPages.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -232,7 +261,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
                     .addComponent(jTextFieldAuctionWinningBiderName)
                     .addComponent(jTextFieldAuctionWinningBidAmount)
                     .addComponent(jTextFieldAuctionTitle)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                     .addComponent(jFormattedTextFieldAuctionDate)
                     .addComponent(jFormattedTextFieldCreatedAt, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
@@ -275,8 +304,8 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         jScrollPaneBidRecords.setColumnHeaderView(jPanelBidRecordListHeader);
 
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPaneBidRecords.setViewportView(jList1);
+        jListBidRecords.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPaneBidRecords.setViewportView(jListBidRecords);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -359,7 +388,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jRadioButtonWindowsClassicLaf)
                             .addComponent(jRadioButtonMetalLaf))))
-                .addContainerGap(147, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -495,7 +524,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jTabbedPaneFormPages, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE))
+                        .addComponent(jTabbedPaneFormPages))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(30, 30, 30)
                         .addComponent(jButtonSearchRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -870,8 +899,8 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 } else {
                     Toolkit.getDefaultToolkit().beep();
                     JOptionPane.showMessageDialog(this,
-                            "No record found for the searched criteria.", 
-                            "Search Results", 
+                            "No record found for the searched criteria.",
+                            "Search Results",
                             JOptionPane.WARNING_MESSAGE);
                 }
             } catch (SQLException e) {
@@ -1020,7 +1049,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidAmount;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidTime;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidderName;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jListBidRecords;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemPrint;
     private javax.swing.JMenuItem jMenuItemSelectAll;
