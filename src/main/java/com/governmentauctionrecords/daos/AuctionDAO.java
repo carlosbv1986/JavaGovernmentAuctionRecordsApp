@@ -1,9 +1,12 @@
 package com.governmentauctionrecords.daos;
 
 import com.governmentauctionrecords.models.Auction;
+
 import com.governmentauctionrecords.utils.SqlServerDatabaseConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AuctionDAO {
 
@@ -109,5 +112,4 @@ public class AuctionDAO {
 
         return null; // no match found
     }
-
 }

@@ -16,13 +16,13 @@ import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
-public class MultiColumnJListRenderer extends JPanel implements ListCellRenderer<Object> {
+public class MultiColumnBidsJListRenderer extends JPanel implements ListCellRenderer<Object> {
 
     private JLabel[] labels = new JLabel[4];
     private Border focusBorder = UIManager.getBorder("List.focusCellHighlightBorder");
     private Border noFocusBorder = BorderFactory.createEmptyBorder(1, 1, 1, 1);
 
-    public MultiColumnJListRenderer() {
+    public MultiColumnBidsJListRenderer() {
         setLayout(new GridLayout(1, 4));
         for (int i = 0; i < labels.length; i++) {
             labels[i] = new JLabel();

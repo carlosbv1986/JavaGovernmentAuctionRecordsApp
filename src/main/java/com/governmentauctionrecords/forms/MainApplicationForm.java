@@ -22,13 +22,16 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import com.governmentauctionrecords.daos.AuctionDAO;
+import com.governmentauctionrecords.daos.BidDAO;
 import com.governmentauctionrecords.models.Auction;
-import com.governmentauctionrecords.utils.MultiColumnJListRenderer;
+import com.governmentauctionrecords.models.Bid;
+import com.governmentauctionrecords.utils.MultiColumnBidsJListRenderer;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JTextArea;
@@ -61,35 +64,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         // Load initial (latest) record on startup
         loadRecord(null, null);
-
-        String[][] rowData = {
-            {"Alice", "25", "NY", "Active"},
-            {"Bob", "30", "CA", "Inactive"},
-            {"Charlie", "22", "TX", "Pending"},};
-
-        // Cast the NetBeans-generated JList to a raw type.
-        // Why? Because the field was declared as JList<String> and we need to store String[] rows.
-        // Raw type allows us to bypass the generic type restriction safely.
-        JList rawList = jListBidRecords;
-
-        // Create a DefaultListModel to hold our row data.
-        // DefaultListModel is mutable, and each element will be a String[] (one row).
-        DefaultListModel<String[]> model = new DefaultListModel<>();
-
-        // Populate the model with the sample row data.
-        for (String[] row : rowData) {
-            // Add each row (String array) as a single element in the list model.
-            model.addElement(row);
-        }
-
-        // Assign the model to the JList.
-        // This replaces the previous model (was likely a default model of Strings).
-        rawList.setModel(model);
-
-        // Set a custom cell renderer to display each String[] as multiple columns.
-        // MultiColumnJListRenderer is a JPanel-based renderer that aligns labels with headers.
-        // It also handles selection highlighting, mimicking the default JList appearance.
-        rawList.setCellRenderer(new MultiColumnJListRenderer());
     }
 
     /**
@@ -106,10 +80,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jMenuItemSelectAll = new javax.swing.JMenuItem();
         jMenuItemPrint = new javax.swing.JMenuItem();
         jPanelBidRecordListHeader = new javax.swing.JPanel();
-        jLabelBidRecordsListHeaderAuctionId = new javax.swing.JLabel();
         jLabelBidRecordsListHeaderBidderName = new javax.swing.JLabel();
-        jLabelBidRecordsListHeaderBidAmount = new javax.swing.JLabel();
-        jLabelBidRecordsListHeaderBidTime = new javax.swing.JLabel();
         buttonGroupLookAndFeelOptions = new javax.swing.ButtonGroup();
         jTabbedPaneFormPages = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
@@ -175,27 +146,12 @@ public class MainApplicationForm extends javax.swing.JFrame {
         });
         jPopupMenuForEditorPane.add(jMenuItemPrint);
 
-        jPanelBidRecordListHeader.setLayout(new java.awt.GridLayout(1, 3));
+        jPanelBidRecordListHeader.setLayout(new java.awt.GridLayout(1, 0));
 
-        jLabelBidRecordsListHeaderAuctionId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelBidRecordsListHeaderAuctionId.setText("Auction ID");
-        jLabelBidRecordsListHeaderAuctionId.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanelBidRecordListHeader.add(jLabelBidRecordsListHeaderAuctionId);
-
-        jLabelBidRecordsListHeaderBidderName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelBidRecordsListHeaderBidderName.setText("Bidder Name");
+        jLabelBidRecordsListHeaderBidderName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelBidRecordsListHeaderBidderName.setText("Below is a list of all the current Auction bidders and their amounts.");
         jLabelBidRecordsListHeaderBidderName.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanelBidRecordListHeader.add(jLabelBidRecordsListHeaderBidderName);
-
-        jLabelBidRecordsListHeaderBidAmount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelBidRecordsListHeaderBidAmount.setText("Bid Amount");
-        jLabelBidRecordsListHeaderBidAmount.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanelBidRecordListHeader.add(jLabelBidRecordsListHeaderBidAmount);
-
-        jLabelBidRecordsListHeaderBidTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelBidRecordsListHeaderBidTime.setText("Bid Time");
-        jLabelBidRecordsListHeaderBidTime.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jPanelBidRecordListHeader.add(jLabelBidRecordsListHeaderBidTime);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Goverment Auction Records");
@@ -978,6 +934,34 @@ public class MainApplicationForm extends javax.swing.JFrame {
         currentRecordCreatedAtTimestamp = record.getCreatedAt();
         currentRecordId = record.getId();
 
+        try {
+            // 1. Fetch bids from database using BidDAO
+            List<Bid> bids = BidDAO.getBidsForAuction(record.getId());
+
+            // 2. Convert List<Bid> to DefaultListModel<String[]>
+            DefaultListModel<String[]> model = new DefaultListModel<>();
+            for (Bid bid : bids) {
+                String[] row = new String[]{
+                    bid.getBidderName(),
+                    "", // leave empty if you have a placeholder column
+                    "",
+                    bid.getBidAmount().toPlainString() // convert BigDecimal to String
+                };
+                model.addElement(row);
+            }
+
+            // 3. Assign the model to the JList (raw type needed if declared as JList<String>)
+            JList rawList = jListBidRecords;
+            rawList.setModel(model);
+
+            // 4. Set your custom renderer to display String[] as multiple columns
+            rawList.setCellRenderer(new MultiColumnBidsJListRenderer());
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error fetching bids: " + ex.getMessage());
+        }
+
         System.out.println("Updated currentRecordCreatedAtTimestamp to: " + currentRecordCreatedAtTimestamp);
     }
 
@@ -1045,9 +1029,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabelBidRecordsListHeaderAuctionId;
-    private javax.swing.JLabel jLabelBidRecordsListHeaderBidAmount;
-    private javax.swing.JLabel jLabelBidRecordsListHeaderBidTime;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidderName;
     private javax.swing.JList<String> jListBidRecords;
     private javax.swing.JMenuItem jMenuItemCopy;
