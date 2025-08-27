@@ -91,10 +91,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jTextAreaAuctionDescription = new javax.swing.JTextArea();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextFieldAuctionWinningBidAmount = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        jTextFieldAuctionWinningBiderName = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
         jFormattedTextFieldAuctionDate = new javax.swing.JFormattedTextField();
         jFormattedTextFieldCreatedAt = new javax.swing.JFormattedTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -179,14 +175,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         jLabel6.setText("Created At:");
 
-        jTextFieldAuctionWinningBidAmount.setEditable(false);
-
-        jLabel7.setText("Winning Bid Amount:");
-
-        jTextFieldAuctionWinningBiderName.setEditable(false);
-
-        jLabel8.setText("Winning Bidder Name:");
-
         jFormattedTextFieldAuctionDate.setEditable(false);
         jFormattedTextFieldAuctionDate.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US))));
 
@@ -208,14 +196,10 @@ public class MainApplicationForm extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
                     .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldAuctionId)
-                    .addComponent(jTextFieldAuctionWinningBiderName)
-                    .addComponent(jTextFieldAuctionWinningBidAmount)
                     .addComponent(jTextFieldAuctionTitle)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                     .addComponent(jFormattedTextFieldAuctionDate)
@@ -245,15 +229,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jFormattedTextFieldCreatedAt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldAuctionWinningBidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldAuctionWinningBiderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
 
         jTabbedPaneFormPages.addTab("Auction Records", jPanel2);
@@ -639,9 +615,8 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 System.out.println("Auction Description: " + auction.getDescription());
                 System.out.println("Auction Date: " + auction.getAuctionDate());
                 System.out.println("Created At: " + auction.getCreatedAt());
-                System.out.println("Winning Bid Amount: " + auction.getWinningBidAmount());
-                System.out.println("Winning Bidder Name: " + auction.getWinningBidderName());
-                // Save to DB or process as needed
+
+                JOptionPane.showMessageDialog(this, "TODO: INSERT");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Invalid input: " + ex.getMessage(),
@@ -682,18 +657,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
             toEdit.setCreatedAt(null);
         }
 
-        String bidText = jTextFieldAuctionWinningBidAmount.getText().trim();
-        if (!bidText.isEmpty()) {
-            try {
-                toEdit.setWinningBidAmount(new BigDecimal(bidText));
-            } catch (NumberFormatException e) {
-                toEdit.setWinningBidAmount(null);
-            }
-        } else {
-            toEdit.setWinningBidAmount(null);
-        }
-
-        toEdit.setWinningBidderName(jTextFieldAuctionWinningBiderName.getText());
         form.setAuctionData(toEdit);
 
         int promptResult
@@ -714,9 +677,9 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 System.out.println("Auction Description: " + auction.getDescription());
                 System.out.println("Auction Date: " + auction.getAuctionDate());
                 System.out.println("Created At: " + auction.getCreatedAt());
-                System.out.println("Winning Bid Amount: " + auction.getWinningBidAmount());
-                System.out.println("Winning Bidder Name: " + auction.getWinningBidderName());
-                // Save to DB or process as needed
+
+                JOptionPane.showMessageDialog(this, "TODO: UPDATE");
+
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Invalid input: " + ex.getMessage(),
@@ -739,7 +702,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
                         objButtons,
                         objButtons[1]);
         if (promptResult == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "Delete Record ID " + currentRecordId);
+            JOptionPane.showMessageDialog(this, "TODO: DELETE Record ID " + currentRecordId);
         }
     }//GEN-LAST:event_jButtonDeleteRecordActionPerformed
 
@@ -772,19 +735,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
             auctionToPrint.setCreatedAt(null);
         }
 
-        String bidText = jTextFieldAuctionWinningBidAmount.getText().trim();
-        if (!bidText.isEmpty()) {
-            try {
-                auctionToPrint.setWinningBidAmount(new BigDecimal(bidText));
-            } catch (NumberFormatException e) {
-                auctionToPrint.setWinningBidAmount(null);
-            }
-        } else {
-            auctionToPrint.setWinningBidAmount(null);
-        }
-
-        auctionToPrint.setWinningBidderName(jTextFieldAuctionWinningBiderName.getText());
-
         // Use our custom Printable and call PrinterJob.print(),
         // where Java uses the lower-level AWT printing API, which shows the 
         // native OS print dialog. This dialog is more generic and lower-level,
@@ -811,8 +761,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 + "Description: " + auctionToPrint.getDescription() + "\n"
                 + "Auction Date: " + auctionToPrint.getAuctionDate() + "\n"
                 + "Created At: " + auctionToPrint.getCreatedAt() + "\n"
-                + "Winning Bid Amount: " + auctionToPrint.getWinningBidAmount() + "\n"
-                + "Winning Bidder Name: " + auctionToPrint.getWinningBidderName()
         );
 
         try {
@@ -925,11 +873,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
             jFormattedTextFieldCreatedAt.setValue(null);
         }
 
-        BigDecimal amount = record.getWinningBidAmount();
-        jTextFieldAuctionWinningBidAmount.setText(amount != null ? NumberFormat.getCurrencyInstance(Locale.US).format(amount) : "");
-
-        jTextFieldAuctionWinningBiderName.setText(record.getWinningBidderName() != null ? record.getWinningBidderName() : "");
-
         // **CRUCIAL:** Update current timestamp AFTER loading record
         currentRecordCreatedAtTimestamp = record.getCreatedAt();
         currentRecordId = record.getId();
@@ -1026,8 +969,6 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidderName;
     private javax.swing.JList<String> jListBidRecords;
@@ -1050,7 +991,5 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JTextArea jTextAreaAuctionDescription;
     private javax.swing.JTextField jTextFieldAuctionId;
     private javax.swing.JTextField jTextFieldAuctionTitle;
-    private javax.swing.JTextField jTextFieldAuctionWinningBidAmount;
-    private javax.swing.JTextField jTextFieldAuctionWinningBiderName;
     // End of variables declaration//GEN-END:variables
 }

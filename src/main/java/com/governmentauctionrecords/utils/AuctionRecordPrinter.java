@@ -51,12 +51,6 @@ public class AuctionRecordPrinter implements Printable {
         g2d.drawString("Created At: " + auction.getCreatedAt(), 10, y);
         y += 20;
 
-        g2d.drawString("Winning Bid Amount: " + auction.getWinningBidAmount(), 10, y);
-        y += 20;
-
-        g2d.drawString("Winning Bidder Name: " + auction.getWinningBidderName(), 10, y);
-        y += 20;
-
         return PAGE_EXISTS;
     }
 }

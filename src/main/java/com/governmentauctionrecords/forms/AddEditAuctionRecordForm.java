@@ -43,10 +43,6 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jFormattedTextFieldAuctionDate = new javax.swing.JFormattedTextField();
         jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jTextFieldAuctionWinningBidAmount = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jTextFieldAuctionWinningBiderName = new javax.swing.JTextField();
         jFormattedTextFieldCreatedAt = new javax.swing.JFormattedTextField();
         jLabel9 = new javax.swing.JLabel();
         jTextFieldAuctionId = new javax.swing.JTextField();
@@ -65,10 +61,7 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
 
         jLabel6.setText("Created At:");
 
-        jLabel7.setText("Winning Bid Amount:");
-
-        jLabel8.setText("Winning Bidder Name:");
-
+        jFormattedTextFieldCreatedAt.setEditable(false);
         jFormattedTextFieldCreatedAt.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(new SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.US))));
 
         jLabel9.setText("ID:");
@@ -86,14 +79,10 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
                     .addComponent(jLabel3)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
                     .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextFieldAuctionId)
-                    .addComponent(jTextFieldAuctionWinningBiderName)
-                    .addComponent(jTextFieldAuctionWinningBidAmount)
                     .addComponent(jTextFieldAuctionTitle)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
                     .addComponent(jFormattedTextFieldAuctionDate)
@@ -123,14 +112,6 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(jFormattedTextFieldCreatedAt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldAuctionWinningBidAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldAuctionWinningBiderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -158,15 +139,6 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
             auction.setCreatedAt(null);
         }
 
-        String bidText = jTextFieldAuctionWinningBidAmount.getText().trim();
-        if (!bidText.isEmpty()) {
-            auction.setWinningBidAmount(new BigDecimal(bidText));
-        } else {
-            auction.setWinningBidAmount(null);
-        }
-
-        auction.setWinningBidderName(jTextFieldAuctionWinningBiderName.getText().trim());
-
         return auction;
     }
 
@@ -193,15 +165,6 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
         } else {
             jFormattedTextFieldCreatedAt.setText("");
         }
-
-        if (auction.getWinningBidAmount() != null) {
-            jTextFieldAuctionWinningBidAmount.setText(auction.getWinningBidAmount().toString());
-        } else {
-            jTextFieldAuctionWinningBidAmount.setText("");
-        }
-
-        jTextFieldAuctionWinningBiderName.setText(auction.getWinningBidderName() != null
-                ? auction.getWinningBidderName() : "");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -211,14 +174,10 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextAreaAuctionDescription;
     private javax.swing.JTextField jTextFieldAuctionId;
     private javax.swing.JTextField jTextFieldAuctionTitle;
-    private javax.swing.JTextField jTextFieldAuctionWinningBidAmount;
-    private javax.swing.JTextField jTextFieldAuctionWinningBiderName;
     // End of variables declaration//GEN-END:variables
 }

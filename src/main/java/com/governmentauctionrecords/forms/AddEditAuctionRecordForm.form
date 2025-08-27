@@ -23,15 +23,11 @@
                   <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel9" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jTextFieldAuctionId" max="32767" attributes="0"/>
-                  <Component id="jTextFieldAuctionWinningBiderName" alignment="0" max="32767" attributes="0"/>
-                  <Component id="jTextFieldAuctionWinningBidAmount" alignment="0" max="32767" attributes="0"/>
                   <Component id="jTextFieldAuctionTitle" alignment="0" max="32767" attributes="0"/>
                   <Component id="jScrollPane1" alignment="0" pref="321" max="32767" attributes="0"/>
                   <Component id="jFormattedTextFieldAuctionDate" alignment="0" max="32767" attributes="0"/>
@@ -68,16 +64,6 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jFormattedTextFieldCreatedAt" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jTextFieldAuctionWinningBidAmount" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jTextFieldAuctionWinningBiderName" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -129,22 +115,9 @@
         <Property name="text" type="java.lang.String" value="Created At:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel7">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Winning Bid Amount:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldAuctionWinningBidAmount">
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel8">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Winning Bidder Name:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="jTextFieldAuctionWinningBiderName">
-    </Component>
     <Component class="javax.swing.JFormattedTextField" name="jFormattedTextFieldCreatedAt">
       <Properties>
+        <Property name="editable" type="boolean" value="false"/>
         <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new DefaultFormatterFactory(new DateFormatter(new SimpleDateFormat(&quot;MM/dd/yyyy hh:mm a&quot;, Locale.US)))" type="code"/>
         </Property>

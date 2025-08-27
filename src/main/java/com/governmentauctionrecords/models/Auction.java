@@ -13,8 +13,6 @@ public class Auction {
     private String title;
     private String description;
     private Timestamp auctionDate;
-    private BigDecimal winningBidAmount;
-    private String winningBidderName;
     private Timestamp createdAt;
 
     // Getters & Setters
@@ -29,12 +27,6 @@ public class Auction {
 
     public Timestamp getAuctionDate() { return auctionDate; }
     public void setAuctionDate(Timestamp auctionDate) { this.auctionDate = auctionDate; }
-
-    public BigDecimal getWinningBidAmount() { return winningBidAmount; }
-    public void setWinningBidAmount(BigDecimal winningBidAmount) { this.winningBidAmount = winningBidAmount; }
-
-    public String getWinningBidderName() { return winningBidderName; }
-    public void setWinningBidderName(String winningBidderName) { this.winningBidderName = winningBidderName; }
 
     public Timestamp getCreatedAt() { return createdAt; }
     public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }

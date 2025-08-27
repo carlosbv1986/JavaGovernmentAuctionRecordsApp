@@ -5,8 +5,6 @@ import com.governmentauctionrecords.models.Auction;
 import com.governmentauctionrecords.utils.SqlServerDatabaseConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AuctionDAO {
 
@@ -16,8 +14,6 @@ public class AuctionDAO {
         auction.setTitle(rs.getString("Title"));
         auction.setDescription(rs.getString("Description"));
         auction.setAuctionDate(rs.getTimestamp("AuctionDate"));
-        auction.setWinningBidAmount(rs.getBigDecimal("WinningBidAmount"));
-        auction.setWinningBidderName(rs.getString("WinningBidderName"));
 
         Timestamp createdAtTs = rs.getTimestamp("CreatedAt");
         System.out.println("Fetched auction CreatedAt: " + createdAtTs);
