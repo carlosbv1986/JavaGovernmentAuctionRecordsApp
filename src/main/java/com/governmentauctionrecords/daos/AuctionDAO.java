@@ -108,4 +108,59 @@ public class AuctionDAO {
 
         return null; // no match found
     }
+
+    public static int insertAuction(Auction auction) throws SQLException {
+        String sql = "INSERT INTO Auction (Title, Description, AuctionDate, CreatedAt) "
+                + "VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = SqlServerDatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, auction.getTitle());
+            stmt.setString(2, auction.getDescription());
+            stmt.setTimestamp(3, auction.getAuctionDate());
+            stmt.setTimestamp(4, auction.getCreatedAt());
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0) {
+                try (ResultSet keys = stmt.getGeneratedKeys()) {
+                    if (keys.next()) {
+                        return keys.getInt(1); // return new Id
+                    }
+                }
+            }
+        }
+        return -1; // insert failed
+    }
+
+    public static boolean updateAuction(Auction auction) throws SQLException {
+        String sql = "UPDATE Auction SET Title = ?, Description = ?, AuctionDate = ?, CreatedAt = ? WHERE Id = ?";
+
+        try (Connection conn = SqlServerDatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, auction.getTitle());
+            stmt.setString(2, auction.getDescription());
+            stmt.setTimestamp(3, auction.getAuctionDate());
+            stmt.setTimestamp(4, auction.getCreatedAt()); // now updating CreatedAt
+            stmt.setInt(5, auction.getId());
+
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        }
+    }
+
+    public static boolean deleteAuction(int id) throws SQLException {
+        String sql = "DELETE FROM Auction WHERE Id = ?";
+
+        try (Connection conn = SqlServerDatabaseConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        }
+    }
 }

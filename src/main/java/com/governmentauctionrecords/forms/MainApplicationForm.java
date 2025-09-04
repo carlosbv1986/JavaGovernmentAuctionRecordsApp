@@ -26,7 +26,6 @@ import com.governmentauctionrecords.daos.BidDAO;
 import com.governmentauctionrecords.models.Auction;
 import com.governmentauctionrecords.models.Bid;
 import com.governmentauctionrecords.utils.MultiColumnBidsJListRenderer;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
@@ -146,7 +145,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         jLabelBidRecordsListHeaderBidderName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelBidRecordsListHeaderBidderName.setText("Below is a list of all the current Auction bidders and their amounts.");
-        jLabelBidRecordsListHeaderBidderName.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabelBidRecordsListHeaderBidderName.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanelBidRecordListHeader.add(jLabelBidRecordsListHeaderBidderName);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -610,13 +609,32 @@ public class MainApplicationForm extends javax.swing.JFrame {
         if (promptResult == JOptionPane.YES_OPTION) {
             try {
                 Auction auction = form.getAuctionData();
-                System.out.println("Auction ID: " + auction.getId());
-                System.out.println("Auction Title: " + auction.getTitle());
-                System.out.println("Auction Description: " + auction.getDescription());
-                System.out.println("Auction Date: " + auction.getAuctionDate());
-                System.out.println("Created At: " + auction.getCreatedAt());
 
-                JOptionPane.showMessageDialog(this, "TODO: INSERT");
+                int newId = AuctionDAO.insertAuction(auction);
+
+                if (newId > 0) {
+                    JOptionPane.showMessageDialog(this,
+                            "Auction inserted successfully with ID: " + newId,
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // After insert, load the latest auction (which will be the one just added)
+                    Auction latestAuction = AuctionDAO.getLatestAuction();
+                    if (latestAuction != null) {
+                        populateForm(latestAuction);
+                        updateNavigationButtons(latestAuction.getCreatedAt());
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Could not reload the newly inserted auction.",
+                                "Warning",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Failed to insert auction record.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Invalid input: " + ex.getMessage(),
@@ -628,62 +646,85 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private void jButtonEditRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditRecordActionPerformed
         String commandButtons[] = {"Submit", "Cancel"};
         AddEditAuctionRecordForm form = new AddEditAuctionRecordForm();
-        Auction toEdit = new Auction();
-        toEdit.setId(Integer.parseInt(jTextFieldAuctionId.getText()));
-        toEdit.setTitle(jTextFieldAuctionTitle.getText());
-        toEdit.setDescription(jTextAreaAuctionDescription.getText());
+
+        // Pre-fill the form with current record
+        Auction current = new Auction();
+        current.setId(Integer.parseInt(jTextFieldAuctionId.getText().trim()));
+        current.setTitle(jTextFieldAuctionTitle.getText().trim());
+        current.setDescription(jTextAreaAuctionDescription.getText().trim());
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 
         try {
             String auctionDateText = jFormattedTextFieldAuctionDate.getText().trim();
             if (!auctionDateText.isEmpty()) {
-                toEdit.setAuctionDate(new Timestamp(sdf.parse(auctionDateText).getTime()));
+                current.setAuctionDate(new Timestamp(sdf.parse(auctionDateText).getTime()));
             } else {
-                toEdit.setAuctionDate(null);
+                current.setAuctionDate(null);
             }
         } catch (Exception e) {
-            toEdit.setAuctionDate(null); // or handle error as needed
+            current.setAuctionDate(null);
         }
 
         try {
             String createdAtText = jFormattedTextFieldCreatedAt.getText().trim();
             if (!createdAtText.isEmpty()) {
-                toEdit.setCreatedAt(new Timestamp(sdf.parse(createdAtText).getTime()));
+                current.setCreatedAt(new Timestamp(sdf.parse(createdAtText).getTime()));
             } else {
-                toEdit.setCreatedAt(null);
+                current.setCreatedAt(null);
             }
         } catch (Exception e) {
-            toEdit.setCreatedAt(null);
+            current.setCreatedAt(null);
         }
 
-        form.setAuctionData(toEdit);
+        form.setAuctionData(current);
 
-        int promptResult
-                = JOptionPane.showOptionDialog(
-                        this,
-                        form,
-                        "Edit Auction Record",
-                        JOptionPane.DEFAULT_OPTION,
-                        JOptionPane.INFORMATION_MESSAGE,
-                        null,
-                        commandButtons,
-                        null);
+        int promptResult = JOptionPane.showOptionDialog(
+                this,
+                form,
+                "Edit Auction Record",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                commandButtons,
+                null);
+
         if (promptResult == JOptionPane.YES_OPTION) {
             try {
-                Auction auction = form.getAuctionData();
-                System.out.println("Auction ID: " + auction.getId());
-                System.out.println("Auction Title: " + auction.getTitle());
-                System.out.println("Auction Description: " + auction.getDescription());
-                System.out.println("Auction Date: " + auction.getAuctionDate());
-                System.out.println("Created At: " + auction.getCreatedAt());
+                Auction edited = form.getAuctionData();
 
-                JOptionPane.showMessageDialog(this, "TODO: UPDATE");
+                boolean updated = AuctionDAO.updateAuction(edited);
+
+                if (updated) {
+                    JOptionPane.showMessageDialog(this,
+                            "Auction updated successfully!",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // Immediately reflect the updated values on the form
+                    populateForm(edited);
+
+                    // Recompute prev/next availability based on (possibly changed) CreatedAt
+                    updateNavigationButtons(edited.getCreatedAt());
+
+                    // (Optional) If you prefer to show whatever is newest after an edit:
+                    // Auction latest = AuctionDAO.getLatestAuction();
+                    // if (latest != null) {
+                    //     populateForm(latest);
+                    //     updateNavigationButtons(latest.getCreatedAt());
+                    // }
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "No auction was updated (check the ID).",
+                            "Update Failed",
+                            JOptionPane.WARNING_MESSAGE);
+                }
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this,
                         "Invalid input: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButtonEditRecordActionPerformed
@@ -702,7 +743,31 @@ public class MainApplicationForm extends javax.swing.JFrame {
                         objButtons,
                         objButtons[1]);
         if (promptResult == JOptionPane.YES_OPTION) {
-            JOptionPane.showMessageDialog(this, "TODO: DELETE Record ID " + currentRecordId);
+            try {
+                boolean deleted = AuctionDAO.deleteAuction(currentRecordId);
+
+                if (deleted) {
+                    JOptionPane.showMessageDialog(this,
+                            "Auction deleted successfully!",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    // Navigate to Latest auction after deletion
+                    loadRecord(null, null);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "No auction was deleted (check the ID).",
+                            "Update Failed",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this,
+                        "Error deleting record: " + ex.getMessage(),
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+
         }
     }//GEN-LAST:event_jButtonDeleteRecordActionPerformed
 
@@ -883,12 +948,15 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
             // 2. Convert List<Bid> to DefaultListModel<String[]>
             DefaultListModel<String[]> model = new DefaultListModel<>();
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+
             for (Bid bid : bids) {
+                String formattedBidAmount = currencyFormat.format(bid.getBidAmount()); // convert BigDecimal to Currency String
                 String[] row = new String[]{
                     bid.getBidderName(),
                     "", // leave empty if you have a placeholder column
                     "",
-                    bid.getBidAmount().toPlainString() // convert BigDecimal to String
+                    formattedBidAmount
                 };
                 model.addElement(row);
             }

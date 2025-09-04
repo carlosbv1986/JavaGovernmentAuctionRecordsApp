@@ -6,7 +6,6 @@
 package com.governmentauctionrecords.forms;
 
 import com.governmentauctionrecords.models.Auction;
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -46,12 +45,15 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
         jFormattedTextFieldCreatedAt = new javax.swing.JFormattedTextField();
         jLabel9 = new javax.swing.JLabel();
         jTextFieldAuctionId = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         jLabel3.setText("Title:");
 
         jLabel4.setText("Description:");
 
         jTextAreaAuctionDescription.setColumns(20);
+        jTextAreaAuctionDescription.setLineWrap(true);
         jTextAreaAuctionDescription.setRows(5);
         jScrollPane1.setViewportView(jTextAreaAuctionDescription);
 
@@ -67,6 +69,10 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
         jLabel9.setText("ID:");
 
         jTextFieldAuctionId.setEditable(false);
+
+        jLabel1.setText("(ID is auto-generated, leave empty)");
+
+        jLabel2.setText("Required Format: MM/dd/yyyy hh:mm a");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -86,7 +92,12 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
                     .addComponent(jTextFieldAuctionTitle)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
                     .addComponent(jFormattedTextFieldAuctionDate)
-                    .addComponent(jFormattedTextFieldCreatedAt, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jFormattedTextFieldCreatedAt, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -96,6 +107,8 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(jTextFieldAuctionId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -108,6 +121,8 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(jFormattedTextFieldAuctionDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -119,7 +134,13 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
     public Auction getAuctionData() throws Exception {
         Auction auction = new Auction();
 
-        auction.setId(Integer.parseInt(jTextFieldAuctionId.getText().trim()));
+        String idText = jTextFieldAuctionId.getText().trim();
+        if (!idText.isEmpty()) {
+            auction.setId(Integer.parseInt(idText));
+        } else {
+            // ID not set for new inserts
+            // Leave unset
+        }
         auction.setTitle(jTextFieldAuctionTitle.getText().trim());
         auction.setDescription(jTextAreaAuctionDescription.getText().trim());
 
@@ -136,7 +157,7 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
         if (!createdAtText.isEmpty()) {
             auction.setCreatedAt(new Timestamp(sdf.parse(createdAtText).getTime()));
         } else {
-            auction.setCreatedAt(null);
+            auction.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         }
 
         return auction;
@@ -170,6 +191,8 @@ public class AddEditAuctionRecordForm extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFormattedTextField jFormattedTextFieldAuctionDate;
     private javax.swing.JFormattedTextField jFormattedTextFieldCreatedAt;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
