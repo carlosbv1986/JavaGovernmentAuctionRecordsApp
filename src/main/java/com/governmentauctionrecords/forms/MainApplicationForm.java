@@ -26,9 +26,13 @@ import com.governmentauctionrecords.daos.BidDAO;
 import com.governmentauctionrecords.models.Auction;
 import com.governmentauctionrecords.models.Bid;
 import com.governmentauctionrecords.utils.MultiColumnBidsJListRenderer;
+import java.awt.Font;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -45,6 +49,11 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
     private int currentRecordId = 0;
     private Timestamp currentRecordCreatedAtTimestamp = null;
+
+    // Constants for column widths
+    final int BIDDER_NAME_WIDTH = 25;
+    final int BID_AMOUNT_WIDTH = 15;
+    final int DESCRIPTION_WIDTH = 50; // optional wrapping for description
 
     /**
      * Creates new form MainApplicationForm
@@ -112,7 +121,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanelRecordPrintOptions = new javax.swing.JPanel();
-        jCheckBoxIncludebidRecords = new javax.swing.JCheckBox();
+        jCheckBoxIncludeAuctionBidRecords = new javax.swing.JCheckBox();
         jButtonPrintRecord = new javax.swing.JButton();
         jButtonExit = new javax.swing.JButton();
         jButtonSearchRecord = new javax.swing.JButton();
@@ -376,7 +385,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
         jPanelRecordPrintOptions.setBorder(javax.swing.BorderFactory.createTitledBorder("Record Print Options"));
 
-        jCheckBoxIncludebidRecords.setText("Include Bid Records");
+        jCheckBoxIncludeAuctionBidRecords.setText("Include Bid Records");
 
         jButtonPrintRecord.setText("Print");
         jButtonPrintRecord.addActionListener(new java.awt.event.ActionListener() {
@@ -393,14 +402,14 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanelRecordPrintOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonPrintRecord, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jCheckBoxIncludebidRecords))
+                    .addComponent(jCheckBoxIncludeAuctionBidRecords))
                 .addContainerGap())
         );
         jPanelRecordPrintOptionsLayout.setVerticalGroup(
             jPanelRecordPrintOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelRecordPrintOptionsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jCheckBoxIncludebidRecords)
+                .addComponent(jCheckBoxIncludeAuctionBidRecords)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonPrintRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -799,37 +808,136 @@ public class MainApplicationForm extends javax.swing.JFrame {
         } catch (Exception e) {
             auctionToPrint.setCreatedAt(null);
         }
-
         // Use our custom Printable and call PrinterJob.print(),
         // where Java uses the lower-level AWT printing API, which shows the 
         // native OS print dialog. This dialog is more generic and lower-level,
         // less polished than the Swing print() dialog on text components.
-//        PrinterJob job = PrinterJob.getPrinterJob();
-//        job.setPrintable(new AuctionRecordPrinter(auctionToPrint));
+        //        PrinterJob job = PrinterJob.getPrinterJob();
+        //        job.setPrintable(new AuctionRecordPrinter(auctionToPrint));
+        //
+        //        boolean doPrint = job.printDialog();
+        //        if (doPrint) {
+        //            try {
+        //                job.print();
+        //            } catch (PrinterException e) {
+        //                e.printStackTrace();
+        //                // handle error
+        //            }
+        //        }
+
+        // Recommended uniform width for headers/footers
+        int lineWidth = 50;
+        String line = "=".repeat(lineWidth);
+
+        // Start building the professional printout
+        StringBuilder sb = new StringBuilder();
+
+        // Header
+        sb.append(line).append("\n");
+        // Centered header text
+        sb.append(String.format("%" + ((lineWidth + "AUCTION RECORD".length()) / 2) + "s%n", "AUCTION RECORD"));
+        sb.append(line).append("\n\n");
+
+        // Auction info
+        sb.append(String.format("Auction ID    : %d%n", currentRecordId));
+
+        // Wrap Title if too long
+        List<String> titleLines = wrapText(auctionToPrint.getTitle(), DESCRIPTION_WIDTH);
+        sb.append("Title         : ").append(titleLines.get(0)).append("\n");
+        for (int i = 1; i < titleLines.size(); i++) {
+            sb.append("                ").append(titleLines.get(i)).append("\n");
+        }
+
+        // Wrap Description if too long
+        List<String> descriptionLines = wrapText(auctionToPrint.getDescription(), DESCRIPTION_WIDTH);
+        sb.append("Description   : ").append(descriptionLines.get(0)).append("\n");
+        for (int i = 1; i < descriptionLines.size(); i++) {
+            sb.append("                ").append(descriptionLines.get(i)).append("\n");
+        }
+        
+        // Wrap and justify Description
+//        int descriptionWidth = lineWidth - 16; // leave space for "Description   : "
+//        List<String> descriptionLines = justifyText(auctionToPrint.getDescription(), descriptionWidth);
 //
-//        boolean doPrint = job.printDialog();
-//        if (doPrint) {
-//            try {
-//                job.print();
-//            } catch (PrinterException e) {
-//                e.printStackTrace();
-//                // handle error
-//            }
+//        sb.append("Description   : ").append(descriptionLines.get(0)).append("\n");
+//        for (int i = 1; i < descriptionLines.size(); i++) {
+//            sb.append("                ").append(descriptionLines.get(i)).append("\n");
 //        }
+
+        // Auction and creation timestamps
+        sb.append(String.format("Auction Date  : %s%n", auctionToPrint.getAuctionDate() != null ? sdf.format(auctionToPrint.getAuctionDate()) : "N/A"));
+        sb.append(String.format("Created At    : %s%n", auctionToPrint.getCreatedAt() != null ? sdf.format(auctionToPrint.getCreatedAt()) : "N/A"));
+        sb.append("\n");
+
+        // Include bids if checkbox checked
+        if (jCheckBoxIncludeAuctionBidRecords.isSelected()) {
+            try {
+                List<Bid> bids = BidDAO.getBidsForAuction(currentRecordId);
+                if (!bids.isEmpty()) {
+                    sb.append(line).append("\n");
+                    sb.append(String.format("%" + ((lineWidth + "BIDS".length()) / 2) + "s%n", "BIDS")); // centered
+                    sb.append(line).append("\n");
+
+                    // Header row
+                    sb.append(String.format("%-" + BIDDER_NAME_WIDTH + "s | %" + BID_AMOUNT_WIDTH + "s%n", "Bidder Name", "Bid Amount"));
+                    int tableWidth = BIDDER_NAME_WIDTH + BID_AMOUNT_WIDTH + 3; // 3 for " | "
+                    sb.append("-".repeat(tableWidth)).append("\n");
+
+                    BigDecimal highestBid = BigDecimal.ZERO;
+                    BigDecimal totalBidAmount = BigDecimal.ZERO;
+
+                    for (Bid bid : bids) {
+                        // Wrap bidder name if too long
+                        List<String> nameLines = wrapText(bid.getBidderName(), BIDDER_NAME_WIDTH);
+                        String formattedAmount = NumberFormat.getCurrencyInstance().format(bid.getBidAmount());
+
+                        for (int i = 0; i < nameLines.size(); i++) {
+                            if (i == 0) {
+                                // First line: show bidder name + bid amount
+                                sb.append(String.format("%-" + BIDDER_NAME_WIDTH + "s | %" + BID_AMOUNT_WIDTH + "s%n", nameLines.get(i), formattedAmount));
+                            } else {
+                                // Subsequent lines: only show bidder name continuation
+                                sb.append(String.format("%-" + BIDDER_NAME_WIDTH + "s | %" + BID_AMOUNT_WIDTH + "s%n", nameLines.get(i), ""));
+                            }
+                        }
+
+                        if (bid.getBidAmount().compareTo(highestBid) > 0) {
+                            highestBid = bid.getBidAmount();
+                        }
+
+                        totalBidAmount = totalBidAmount.add(bid.getBidAmount()); // sum all bids
+                    }
+
+                    sb.append("-".repeat(tableWidth)).append("\n");
+                    sb.append(String.format("Total Bids       : %d%n", bids.size()));
+                    sb.append(String.format("Highest Bid      : %s%n", NumberFormat.getCurrencyInstance().format(highestBid)));
+                    sb.append(String.format("Total of Bids    : %s%n", NumberFormat.getCurrencyInstance().format(totalBidAmount)));
+                } else {
+                    sb.append("No bids found for this auction.\n\n");
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                sb.append("\nError fetching bids: ").append(ex.getMessage()).append("\n");
+            }
+        }
+
+        // Footer
+        sb.append(line).append("\n");
+        // Center footer text correctly
+        String footerText = "END OF AUCTION RECORD";
+        int padding = (lineWidth - footerText.length()) / 2;
+        sb.append(" ".repeat(padding)).append(footerText).append("\n");
+        sb.append(line).append("\n");
+
         // Use Swing, where it uses its own built-in printing implementation 
         // specifically tailored for text components. This method handles 
         // pagination, font styles, and the print dialog with features optimized 
         // for printing text, including headers, footers, and selections.
-        JTextArea printArea = new JTextArea();
-        printArea.setText(
-                "Title: " + auctionToPrint.getTitle() + "\n"
-                + "Description: " + auctionToPrint.getDescription() + "\n"
-                + "Auction Date: " + auctionToPrint.getAuctionDate() + "\n"
-                + "Created At: " + auctionToPrint.getCreatedAt() + "\n"
-        );
+        JTextArea printArea = new JTextArea(sb.toString());
+        printArea.setFont(new Font("Monospaced", Font.PLAIN, 12)); // monospaced for neat alignment
 
         try {
-            boolean done = printArea.print();  // This shows the nicer Swing print dialog
+            boolean done = printArea.print();
             if (done) {
                 System.out.println("Printing completed");
             } else {
@@ -837,8 +945,8 @@ public class MainApplicationForm extends javax.swing.JFrame {
             }
         } catch (PrinterException ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Printing error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-
 
     }//GEN-LAST:event_jButtonPrintRecordActionPerformed
 
@@ -1015,6 +1123,73 @@ public class MainApplicationForm extends javax.swing.JFrame {
         }
     }
 
+    // Helper function to wrap text
+    private List<String> wrapText(String text, int width) {
+        List<String> lines = new ArrayList<>();
+        if (text == null) {
+            text = "";
+        }
+        while (text.length() > width) {
+            int spaceIndex = text.lastIndexOf(' ', width);
+            if (spaceIndex <= 0) {
+                spaceIndex = width; // no space found
+            }
+            lines.add(text.substring(0, spaceIndex));
+            text = text.substring(spaceIndex).trim();
+        }
+        if (!text.isEmpty()) {
+            lines.add(text);
+        }
+        return lines;
+    }
+
+    /**
+     * Justifies a line of text to fill a specific width by adding extra spaces
+     * between words. Last line of paragraph is not justified (kept
+     * left-aligned).
+     */
+    private List<String> justifyText(String text, int width) {
+        List<String> words = Arrays.asList(text.split("\\s+"));
+        List<String> lines = new ArrayList<>();
+        int start = 0;
+
+        while (start < words.size()) {
+            int lineLength = words.get(start).length();
+            int end = start + 1;
+            while (end < words.size() && lineLength + 1 + words.get(end).length() <= width) {
+                lineLength += 1 + words.get(end).length();
+                end++;
+            }
+
+            List<String> lineWords = words.subList(start, end);
+            StringBuilder line = new StringBuilder();
+            int spacesNeeded = width - lineLength + (lineWords.size() - 1); // total extra spaces
+
+            if (end == words.size() || lineWords.size() == 1) {
+                // Last line or single word: left-align
+                line.append(String.join(" ", lineWords));
+            } else {
+                // Fully justify
+                int gaps = lineWords.size() - 1;
+                int spacesPerGap = spacesNeeded / gaps + 1;
+                int extraSpaces = spacesNeeded % gaps;
+
+                for (int i = 0; i < lineWords.size(); i++) {
+                    line.append(lineWords.get(i));
+                    if (i < gaps) {
+                        int gap = spacesPerGap + (i < extraSpaces ? 1 : 0);
+                        line.append(" ".repeat(gap));
+                    }
+                }
+            }
+
+            lines.add(line.toString());
+            start = end;
+        }
+
+        return lines;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupLookAndFeelOptions;
@@ -1026,7 +1201,7 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JButton jButtonPreviousRecord;
     private javax.swing.JButton jButtonPrintRecord;
     private javax.swing.JButton jButtonSearchRecord;
-    private javax.swing.JCheckBox jCheckBoxIncludebidRecords;
+    private javax.swing.JCheckBox jCheckBoxIncludeAuctionBidRecords;
     private javax.swing.JEditorPane jEditorPaneHelpContents;
     private javax.swing.JFormattedTextField jFormattedTextFieldAuctionDate;
     private javax.swing.JFormattedTextField jFormattedTextFieldCreatedAt;
