@@ -118,8 +118,8 @@ public class MainApplicationForm extends javax.swing.JFrame {
         jButtonAddRecord = new javax.swing.JButton();
         jButtonPreviousRecord = new javax.swing.JButton();
         jButtonNextRecord = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jLabelPreviousIcon = new javax.swing.JLabel();
+        jLabelNextIcon = new javax.swing.JLabel();
         jPanelRecordPrintOptions = new javax.swing.JPanel();
         jCheckBoxIncludeAuctionBidRecords = new javax.swing.JCheckBox();
         jButtonPrintRecord = new javax.swing.JButton();
@@ -379,9 +379,9 @@ public class MainApplicationForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\carlo\\OneDrive\\Documents\\NetBeansProjects\\GovernmentAuctionRecordsApp\\src\\main\\resources\\images\\arrow-left-icon.png")); // NOI18N
+        jLabelPreviousIcon.setIcon(new javax.swing.ImageIcon("C:\\Users\\carlo\\OneDrive\\Documents\\NetBeansProjects\\GovernmentAuctionRecordsApp\\src\\main\\resources\\images\\arrow-left-icon.png")); // NOI18N
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\carlo\\OneDrive\\Documents\\NetBeansProjects\\GovernmentAuctionRecordsApp\\src\\main\\resources\\images\\arrow-right-icon.png")); // NOI18N
+        jLabelNextIcon.setIcon(new javax.swing.ImageIcon("C:\\Users\\carlo\\OneDrive\\Documents\\NetBeansProjects\\GovernmentAuctionRecordsApp\\src\\main\\resources\\images\\arrow-right-icon.png")); // NOI18N
 
         jPanelRecordPrintOptions.setBorder(javax.swing.BorderFactory.createTitledBorder("Record Print Options"));
 
@@ -438,13 +438,13 @@ public class MainApplicationForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(jLabelPreviousIcon)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonPreviousRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonNextRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
+                        .addComponent(jLabelNextIcon)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jTabbedPaneFormPages))
                 .addGap(18, 18, 18)
@@ -483,8 +483,8 @@ public class MainApplicationForm extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonPreviousRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButtonNextRecord, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(jLabelPreviousIcon, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelNextIcon, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
@@ -952,13 +952,19 @@ public class MainApplicationForm extends javax.swing.JFrame {
 
     private void jTabbedPaneFormPagesStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneFormPagesStateChanged
         int selectedIndex = jTabbedPaneFormPages.getSelectedIndex();
-        boolean isFirstTabSelected = selectedIndex == 0
-                && "Auction Records".equals(jTabbedPaneFormPages.getTitleAt(selectedIndex));
-        jButtonSearchRecord.setVisible(isFirstTabSelected);
-        jButtonAddRecord.setVisible(isFirstTabSelected);
-        jButtonEditRecord.setVisible(isFirstTabSelected);
-        jButtonDeleteRecord.setVisible(isFirstTabSelected);
-        jPanelRecordPrintOptions.setVisible(isFirstTabSelected);
+        
+        boolean isFirstOrSecondTabSelected = selectedIndex == 0 || selectedIndex == 1;
+        
+        jButtonSearchRecord.setVisible(isFirstOrSecondTabSelected);
+        jButtonAddRecord.setVisible(isFirstOrSecondTabSelected);
+        jButtonEditRecord.setVisible(isFirstOrSecondTabSelected);
+        jButtonDeleteRecord.setVisible(isFirstOrSecondTabSelected);
+        jPanelRecordPrintOptions.setVisible(isFirstOrSecondTabSelected);
+        jLabelPreviousIcon.setVisible(isFirstOrSecondTabSelected);
+        jButtonPreviousRecord.setVisible(isFirstOrSecondTabSelected);
+        jLabelNextIcon.setVisible(isFirstOrSecondTabSelected);
+        jButtonNextRecord.setVisible(isFirstOrSecondTabSelected);
+        
     }//GEN-LAST:event_jTabbedPaneFormPagesStateChanged
 
     private void jButtonSearchRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSearchRecordActionPerformed
@@ -1205,15 +1211,15 @@ public class MainApplicationForm extends javax.swing.JFrame {
     private javax.swing.JEditorPane jEditorPaneHelpContents;
     private javax.swing.JFormattedTextField jFormattedTextFieldAuctionDate;
     private javax.swing.JFormattedTextField jFormattedTextFieldCreatedAt;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelBidRecordsListHeaderBidderName;
+    private javax.swing.JLabel jLabelNextIcon;
+    private javax.swing.JLabel jLabelPreviousIcon;
     private javax.swing.JList<String> jListBidRecords;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemPrint;
